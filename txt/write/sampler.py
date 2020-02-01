@@ -82,6 +82,23 @@ class Sampler(Writer):
 
         self.validate_input_parameters()
 
+    def configure(
+        self,
+        k: int = 0,
+        p: float = 0.0,
+        temperature: float = 1.0,
+        repetition_penalty: float = 1.0,
+    ) -> "Sampler":
+        """Syntactic sugar to modify the Sampler instance's configuration."""
+
+        self.k = k
+        self.p = p
+        self.temperature = temperature
+        self.repetition_penalty = repetition_penalty
+
+        self.validate_input_parameters()
+        return self
+
     def validate_input_parameters(self) -> None:
         """Validate the values of the input parameters.
 
