@@ -1,0 +1,3 @@
+numpy
+pytest
+torch>=1.3.1
