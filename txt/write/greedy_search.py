@@ -80,10 +80,16 @@ class GreedySearch(Writer):
         """
         past = self.past
         while True:
-            next_token_logits = self.model.decode(self.past)
-            next_token = torch.argmax(next_token_logits, dim=-1).unsqueeze(-1)
-            past = torch.cat((past, next_token), dim=1)
-            yield next_token.squeeze(-1).squeeze(-1).item()
+            next_token_logits = self.model.decode(past)
+            past, next_token = self.pick_next_token(past, next_token_logits)
+            yield next_token
+
+    def pick_next_token(self, past: torch.tensor, logits: torch.tensor):
+        """Pick the next token and update the state.
+        """
+        next_token = torch.argmax(logits, dim=-1).unsqueeze(-1)
+        past = torch.cat((past, next_token), dim=1)
+        return past, next_token.squeeze(-1).squeeze(-1).item()
 
     def generate_ids(self, num_tokens: int) -> List[int]:
         """Generate a sequence of tokens ids with a fixed length.

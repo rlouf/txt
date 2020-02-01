@@ -149,9 +149,15 @@ class Sampler(Writer):
             logits = self.apply_temperature(logits)
             logits = self.apply_top_k_filter(logits)
             logits = self.apply_nucleus_filter(logits)
-            next_token = torch.multinomial(F.softmax(logits, dim=-1), num_samples=1)
-            past = torch.cat((past, next_token), dim=1)
-            yield next_token.squeeze(-1).squeeze(-1).item()
+            past, next_token = self.pick_next_token(past, logits)
+            yield next_token
+
+    def pick_next_token(self, past: torch.tensor, logits: torch.tensor):
+        """Pick the next token and update the state.
+        """
+        next_token = torch.multinomial(F.softmax(logits, dim=-1), num_samples=1)
+        past = torch.cat((past, next_token), dim=1)
+        return past, next_token.squeeze(-1).squeeze(-1).item()
 
     def apply_repetition_penalty(
         self, logits: torch.tensor, past_sequence: torch.tensor
