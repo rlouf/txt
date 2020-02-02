@@ -1,6 +1,6 @@
 # encoding: utf-8
 import itertools as it
-from typing import List, Generator, Union
+from typing import List, Generator, Tuple, Union
 
 import torch
 
@@ -41,16 +41,16 @@ class GreedySearch(Writer):
 
     >>> prompt = "This was the best of times"
     >>> greedy = GreedySearch.using(model)
-    >>> generated_text = greedy.prompt(prompt).generate(10)
+    >>> generated_text = greedy.start_with(prompt).generate(10)
     >>> text = prompt + generated_text
 
     Use the `generate_until` method to generate text until a specified string
     is generated.
 
     >>> prompt = "This was the best of times"
-    >>> end_token = 1
+    >>> end_string = "."
     >>> greedy = GreedySearch.using(model)
-    >>> generated_text = greedy.prompt(prompt).generate_until(end_token)
+    >>> generated_text = greedy.start_with(prompt).generate_until(end_string)
 
     The generation logic of `GreedySearch` is managed internally by a
     `tokens()` generator. This generator yields token ids one after another,
@@ -71,7 +71,7 @@ class GreedySearch(Writer):
     def tokens(self) -> Generator[int, None, None]:
         """Generate tokens one at a time.
 
-        (TODO) Handle sequence that grow longer than the model's input size.
+        TODO: Handle sequence that grow longer than the model's input size.
 
         Yields
         ------
@@ -84,7 +84,9 @@ class GreedySearch(Writer):
             past, next_token = self.pick_next_token(past, next_token_logits)
             yield next_token
 
-    def pick_next_token(self, past: torch.tensor, logits: torch.tensor):
+    def pick_next_token(
+        self, past: torch.IntTensor, logits: torch.FloatTensor
+    ) -> Tuple[torch.IntTensor, int]:
         """Pick the next token and update the state.
         """
         next_token = torch.argmax(logits, dim=-1).unsqueeze(-1)
@@ -94,8 +96,8 @@ class GreedySearch(Writer):
     def generate_ids(self, num_tokens: int) -> List[int]:
         """Generate a sequence of tokens ids with a fixed length.
 
-        Attribute
-        ---------
+        Argument
+        --------
         num_tokens: int
             The number of tokens to generate (in addition to the prompt
             if one is provided).
@@ -116,14 +118,14 @@ class GreedySearch(Writer):
     ) -> List[int]:
         """Generate a sequence until a token or a list of tokens is generated.
 
-        Attributes
-        ----------
+        Arguments
+        ---------
         end_tokens: int or List[int]
             The token or sequence of tokens that stops the process when generated.
         max_length: int, optional
             The maximum length of the generated sequence. The process will stop
             at `max_length` even if the `end_tokens` has not been generated.
-            Default to 100 to prevents infinite loops.
+            Default to 100 to prevent infinite loops.
         min_length: int, optional
             The minimum length of the generated sequence. If `end_tokens` is
             generated but the sequence is shorter than `min_length` the

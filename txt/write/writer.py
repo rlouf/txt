@@ -4,13 +4,11 @@ from typing import List, Union
 
 import torch
 
-from ..models import Model
+from txt.models import Model
 
 
 class Writer(ABC):
     """Defines a common interface for all sequence generation algorithms.
-
-    TODO: `start_with` is probably better than `prompt`
 
     Examples
     --------
