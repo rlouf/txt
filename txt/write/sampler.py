@@ -1,7 +1,7 @@
 # encoding: utf-8
 """ Generate sequences by sampling tokens. """
 import itertools as it
-from typing import Generator, List, Union
+from typing import Generator, List, Tuple, Union
 import warnings
 
 import torch
@@ -89,7 +89,7 @@ class Sampler(Writer):
         temperature: float = 1.0,
         repetition_penalty: float = 1.0,
     ) -> "Sampler":
-        """Syntactic sugar to modify the Sampler instance's configuration."""
+        """Modify the Sampler instance's configuration."""
 
         self.k = k
         self.p = p
@@ -169,7 +169,9 @@ class Sampler(Writer):
             past, next_token = self.pick_next_token(past, logits)
             yield next_token
 
-    def pick_next_token(self, past: torch.tensor, logits: torch.tensor):
+    def pick_next_token(
+        self, past: torch.tensor, logits: torch.tensor
+    ) -> Tuple[torch.tensor, torch.tensor]:
         """Pick the next token and update the state.
         """
         next_token = torch.multinomial(F.softmax(logits, dim=-1), num_samples=1)
