@@ -18,8 +18,8 @@
   arbitrarily complex generation logic.
 
 ```python
-from txt.writers import GPT2
-from txt.models import GreedySearch, Sampler
+from txt.models import GPT2
+from txt.write import GreedySearch, Sampler
 
 model = GPT2.from_pretrained('gpt2-medium')
 
