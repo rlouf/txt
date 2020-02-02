@@ -7,9 +7,9 @@ import transformers
 from txt.models import Model
 
 
-class GPT2(Model):
-    """ Wrapper around HuggingFace's implementation of OpenAI's GPT2 with a
-    Language Model head.
+class GPT(Model):
+    """Wrapper around HuggingFace's implementation of OpenAI's GPT with a
+    language model head.
     """
 
     def __init__(
@@ -21,14 +21,14 @@ class GPT2(Model):
         self.decoder = decoder
 
     @classmethod
-    def from_pretained(cls, model_name: str) -> "GPT2":
-        tokenizer = transformers.GPT2Tokenizer.from_pretained(model_name)
-        model = transformers.GPT2LMHeadModel.from_pretained(model_name)
+    def from_pretained(cls, model_name: str) -> "GPT":
+        tokenizer = transformers.OpenAIGPTTokenizer.from_pretained(model_name)
+        model = transformers.OpenAIGPTLMHeadModel.from_pretained(model_name)
         return cls(tokenizer, model)
 
     def decode(self, input_ids: torch.LongTensor) -> torch.FloatTensor:
-        """ Returns the last token logits returned by GPT2 with a language
-        model head.
+        """ Returns the last token logits returned by GPT with a language model
+        head.
 
         Argument
         --------

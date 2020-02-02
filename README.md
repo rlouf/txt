@@ -24,7 +24,7 @@ from txt.models import GreedySearch, Sampler
 model = GPT2.from_pretrained('gpt2-medium')
 
 writer1 = GreedySearch.using(model)
-writer2 = Sampler.using(model)
+writer2 = Sampler.using(model).on("gpu").configure(k=10, p=0.5)
 
 writer1.generate_until(".")
 writer2.generate_until(".")
@@ -32,8 +32,8 @@ writer2.generate_until(".")
 
 |              | GPT   | GPT2  | XLNet | Transfo-XL | CTRL  |
 | :---         | :---: | :---: | :---: |  :---:     | :---: |
-| GreedySearch | -     | Yes   | -     |  -         |  -    |
-| Sampling     | -     | Yes   | -     |  -         |  -    |
+| GreedySearch | Yes   | Yes   | -     |  -         |  -    |
+| Sampling     | Yes   | Yes   | -     |  -         |  -    |
 
 ## Philosophy
 
@@ -57,6 +57,7 @@ can:
 - Be confident the correctness of the code;
 - Read and understand the source code. This is sadly very cumbersome in most of
   the librarie we know of. We went to great lengths to make the code legible.
+  Nitpicking PRs regarding names and code organization are welcome.
 - Easily add new functionalities. We tried to keep the code as modular as
   possible so that if you want to add say, another filter for sampling, you
   only need to add the function and modify one line in the code (please submit a

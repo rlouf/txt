@@ -1,5 +1,5 @@
 lint:
-	black txt --check .
+	black --check txt
 	flake8 txt --count --ignore=E501,E203,E731,W503 --show-source --statistics
 	mypy txt
 
