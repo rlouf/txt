@@ -3,8 +3,8 @@ import itertools
 import unittest
 
 import numpy as np
-import torch
 
+import torch
 from txt.write import Sampler
 
 

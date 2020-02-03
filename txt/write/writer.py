@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from typing import List, Union
 
 import torch
-
 from txt.models import Model
 
 

@@ -3,7 +3,6 @@ import itertools
 import unittest
 
 import torch
-
 from txt.write import GreedySearch
 
 

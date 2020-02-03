@@ -3,7 +3,6 @@ from typing import List
 
 import torch
 import transformers
-
 from txt.models import Model
 
 

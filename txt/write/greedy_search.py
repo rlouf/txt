@@ -1,12 +1,11 @@
 # encoding: utf-8
 import itertools as it
-from typing import List, Generator, Tuple, Union
+from typing import Generator, List, Tuple, Union
 
 import torch
-
-from .writer import Writer
 from txt.models import Model
 
+from .writer import Writer
 
 __all__ = ["GreedySearch"]
 

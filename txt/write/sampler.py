@@ -1,15 +1,14 @@
 # encoding: utf-8
 """ Generate sequences by sampling tokens. """
 import itertools as it
-from typing import Generator, List, Tuple, Union
 import warnings
+from typing import Generator, List, Tuple, Union
 
 import torch
 import torch.nn.functional as F
-
-from .writer import Writer
 from txt.models import Model
 
+from .writer import Writer
 
 __all__ = ["Sampler"]
 
